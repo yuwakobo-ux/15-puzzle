@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini Slide Puzzle</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app" aria-labelledby="app-title">
+    <header class="header">
+      <h1 id="app-title">Mini Slide Puzzle</h1>
+      <p class="subtitle">Slide the tiles into order from 1 to 8.</p>
+    </header>
+
+    <section class="status" aria-live="polite">
+      <div>
+        <span class="label">Moves</span>
+        <strong id="move-count">0</strong>
+      </div>
+      <p id="message" class="message">Ready</p>
+    </section>
+
+    <section
+      id="board"
+      class="board"
+      aria-label="3 by 3 sliding puzzle board"
+    ></section>
+
+    <div class="controls">
+      <button id="shuffle-button" type="button">Shuffle</button>
+      <button id="reset-button" type="button">Reset</button>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

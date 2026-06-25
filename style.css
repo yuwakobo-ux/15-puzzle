@@ -1,0 +1,173 @@
+:root {
+  color-scheme: light;
+  --bg: #f4f6f8;
+  --panel: #ffffff;
+  --text: #17202a;
+  --muted: #5f6f7c;
+  --line: #d7dee5;
+  --tile: #2f6f73;
+  --tile-active: #255a5d;
+  --empty: #e8edf1;
+  --focus: #e0a100;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px 14px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.app {
+  width: min(100%, 420px);
+  padding: 20px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(23, 32, 42, 0.08);
+}
+
+.header {
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.7rem;
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 14px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfd;
+}
+
+.label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+#move-count {
+  display: block;
+  margin-top: 2px;
+  font-size: 1.35rem;
+}
+
+.message {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 700;
+  text-align: right;
+}
+
+.message.solved {
+  color: #1f7a3f;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 8px;
+  border-radius: 8px;
+  background: #dfe6ec;
+}
+
+.tile {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  border-radius: 6px;
+  background: var(--tile);
+  color: #ffffff;
+  font-size: clamp(2rem, 14vw, 3.2rem);
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+
+.tile:active {
+  transform: scale(0.97);
+  background: var(--tile-active);
+}
+
+.tile:focus-visible,
+.controls button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.empty {
+  border-radius: 6px;
+  background: var(--empty);
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.controls button {
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.controls button:active {
+  background: #edf2f5;
+}
+
+@media (max-width: 360px) {
+  body {
+    padding: 12px;
+  }
+
+  .app {
+    padding: 14px;
+  }
+
+  .status {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .message {
+    text-align: left;
+  }
+}
