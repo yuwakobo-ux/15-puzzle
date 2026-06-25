@@ -2,6 +2,8 @@ const solvedTiles = [1, 2, 3, 4, 5, 6, 7, 8, null];
 
 let tiles = [...solvedTiles];
 let moves = 0;
+let activePointer = null;
+let suppressNextClick = false;
 
 const board = document.getElementById("board");
 const moveCount = document.getElementById("move-count");
@@ -26,7 +28,17 @@ function renderBoard() {
     tile.type = "button";
     tile.textContent = value;
     tile.setAttribute("aria-label", `Move tile ${value}`);
-    tile.addEventListener("click", () => moveTile(index));
+    tile.addEventListener("click", () => {
+      if (suppressNextClick) {
+        suppressNextClick = false;
+        return;
+      }
+
+      moveTile(index);
+    });
+    tile.addEventListener("pointerdown", (event) => startSwipe(event, index));
+    tile.addEventListener("pointerup", (event) => finishSwipe(event, index));
+    tile.addEventListener("pointercancel", cancelSwipe);
     board.appendChild(tile);
   });
 
@@ -46,6 +58,52 @@ function isNextToEmpty(tileIndex) {
   const rowDiff = Math.abs(getRow(tileIndex) - getRow(emptyIndex));
   const colDiff = Math.abs(getCol(tileIndex) - getCol(emptyIndex));
   return rowDiff + colDiff === 1;
+}
+
+function isSwipeTowardEmpty(tileIndex, deltaX, deltaY) {
+  const emptyIndex = tiles.indexOf(null);
+  const horizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
+
+  if (horizontalSwipe) {
+    return getRow(tileIndex) === getRow(emptyIndex)
+      && Math.sign(deltaX) === Math.sign(getCol(emptyIndex) - getCol(tileIndex));
+  }
+
+  return getCol(tileIndex) === getCol(emptyIndex)
+    && Math.sign(deltaY) === Math.sign(getRow(emptyIndex) - getRow(tileIndex));
+}
+
+function startSwipe(event, tileIndex) {
+  activePointer = {
+    id: event.pointerId,
+    tileIndex,
+    x: event.clientX,
+    y: event.clientY
+  };
+
+  event.currentTarget.setPointerCapture?.(event.pointerId);
+}
+
+function finishSwipe(event, tileIndex) {
+  if (!activePointer || activePointer.id !== event.pointerId || activePointer.tileIndex !== tileIndex) {
+    return;
+  }
+
+  const deltaX = event.clientX - activePointer.x;
+  const deltaY = event.clientY - activePointer.y;
+  const distance = Math.hypot(deltaX, deltaY);
+  activePointer = null;
+
+  if (distance < 24 || !isNextToEmpty(tileIndex) || !isSwipeTowardEmpty(tileIndex, deltaX, deltaY)) {
+    return;
+  }
+
+  suppressNextClick = true;
+  moveTile(tileIndex);
+}
+
+function cancelSwipe() {
+  activePointer = null;
 }
 
 function moveTile(tileIndex) {
