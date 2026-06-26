@@ -222,6 +222,7 @@ h1 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 5px;
+  width: min(100%, calc(100vh - 172px), 390px);
   width: min(100%, calc(100svh - 172px), calc(100dvh - 172px), 390px);
   min-width: 0;
   aspect-ratio: 1;
@@ -399,6 +400,7 @@ h1 {
   }
 
   .board {
+    width: min(100%, calc(100vh - 146px), 390px);
     width: min(100%, calc(100svh - 146px), calc(100dvh - 146px), 390px);
   }
 }
@@ -435,6 +437,7 @@ h1 {
   }
 
   .board {
+    width: min(100%, calc(100vh - 128px), 390px);
     width: min(100%, calc(100svh - 128px), calc(100dvh - 128px), 390px);
   }
 }
@@ -450,6 +453,7 @@ h1 {
   }
 
   .board {
+    width: min(100%, calc(100vh - 124px), 390px);
     width: min(100%, calc(100svh - 124px), calc(100dvh - 124px), 390px);
   }
 }
