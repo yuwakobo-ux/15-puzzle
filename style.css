@@ -71,8 +71,8 @@ body {
   max-height: 100dvh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: max(8px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+  justify-content: flex-start;
+  padding: max(5px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(5px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
   background: var(--panel);
   border: 0;
   border-radius: 0;
@@ -87,21 +87,21 @@ body {
 
 h1 {
   margin: 0;
-  font-size: clamp(1.12rem, 4.6vw, 1.4rem);
+  font-size: clamp(1rem, 4vw, 1.25rem);
   line-height: 1.2;
 }
 
 .version {
-  margin: 2px 0 0;
+  margin: 1px 0 0;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   font-weight: 800;
 }
 
 .subtitle {
-  margin: 2px 0 0;
+  margin: 1px 0 0;
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
 }
 
 .status {
@@ -110,8 +110,8 @@ h1 {
   align-items: center;
   gap: 12px;
   flex: 0 0 auto;
-  margin: 8px 0;
-  padding: 7px 9px;
+  margin: 5px 0;
+  padding: 5px 8px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fbfcfd;
@@ -120,22 +120,22 @@ h1 {
 .mode-switch {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4px;
+  gap: 3px;
   flex: 0 0 auto;
-  margin: 0 0 8px;
-  padding: 4px;
+  margin: 0 0 4px;
+  padding: 3px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #edf2f5;
 }
 
 .mode-button {
-  min-height: 32px;
+  min-height: 28px;
   border: 2px solid transparent;
   border-radius: 6px;
   background: transparent;
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: 0.84rem;
   font-weight: 800;
   cursor: pointer;
 }
@@ -149,9 +149,9 @@ h1 {
 
 .mode-label {
   flex: 0 0 auto;
-  margin: 0 0 6px;
+  margin: 0 0 3px;
   color: var(--tile);
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 900;
   text-align: center;
 }
@@ -159,10 +159,10 @@ h1 {
 .theme-switch {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
+  gap: 2px;
   flex: 0 0 auto;
-  margin: 0 0 6px;
-  padding: 4px;
+  margin: 0 0 4px;
+  padding: 2px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #f4f7f9;
@@ -173,12 +173,12 @@ h1 {
 }
 
 .theme-button {
-  min-height: 30px;
+  min-height: 24px;
   border: 2px solid transparent;
   border-radius: 6px;
   background: #ffffff;
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 900;
   cursor: pointer;
 }
@@ -192,21 +192,22 @@ h1 {
 .label {
   display: block;
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: 0.66rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
 #move-count {
   display: block;
-  margin-top: 2px;
-  font-size: 1.15rem;
+  margin-top: 0;
+  font-size: 1rem;
 }
 
 .message {
   margin: 0;
   color: var(--muted);
   font-weight: 700;
+  font-size: 0.86rem;
   text-align: right;
 }
 
@@ -218,7 +219,7 @@ h1 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 5px;
-  width: min(100%, calc(100svh - 230px), calc(100dvh - 230px), 390px);
+  width: min(100%, calc(100svh - 210px), calc(100dvh - 210px), 390px);
   min-width: 0;
   aspect-ratio: 1;
   align-self: center;
@@ -326,16 +327,16 @@ h1 {
   grid-template-columns: 1fr 1fr;
   gap: 8px;
   flex: 0 0 auto;
-  margin-top: 8px;
+  margin-top: 5px;
 }
 
 .controls button {
-  min-height: 38px;
+  min-height: 34px;
   border: 1px solid var(--line);
   border-radius: 6px;
   background: #ffffff;
   color: var(--text);
-  font-size: 1rem;
+  font-size: 0.92rem;
   font-weight: 800;
   cursor: pointer;
 }
@@ -346,7 +347,7 @@ h1 {
 
 @media (max-width: 360px) {
   .app {
-    padding: max(6px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+    padding: max(4px, env(safe-area-inset-top)) max(6px, env(safe-area-inset-right)) max(4px, env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-left));
   }
 
   .status {
@@ -365,41 +366,41 @@ h1 {
   }
 
   .status {
-    margin: 8px 0;
-    padding: 7px 9px;
+    margin: 4px 0;
+    padding: 4px 7px;
   }
 
   .controls {
-    margin-top: 8px;
+    margin-top: 4px;
   }
 
   .mode-switch {
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 
   .mode-button {
-    min-height: 30px;
+    min-height: 26px;
   }
 
   .mode-label {
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
 
   .theme-switch {
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 
   .theme-button {
-    min-height: 28px;
-    font-size: 0.72rem;
+    min-height: 22px;
+    font-size: 0.64rem;
   }
 
   .controls button {
-    min-height: 38px;
+    min-height: 32px;
   }
 
   .board {
-    width: min(100%, calc(100svh - 212px), calc(100dvh - 212px), 390px);
+    width: min(100%, calc(100svh - 178px), calc(100dvh - 178px), 390px);
   }
 }
 
@@ -409,32 +410,32 @@ h1 {
   }
 
   .version {
-    font-size: 0.68rem;
+    font-size: 0.62rem;
   }
 
   .status {
-    margin: 6px 0;
+    margin: 3px 0;
   }
 
   .controls button {
-    min-height: 34px;
+    min-height: 30px;
   }
 
   .mode-button {
-    min-height: 28px;
-    font-size: 0.84rem;
+    min-height: 24px;
+    font-size: 0.78rem;
   }
 
   .mode-label {
-    font-size: 0.7rem;
+    font-size: 0.64rem;
   }
 
   .theme-button {
-    min-height: 26px;
-    font-size: 0.66rem;
+    min-height: 20px;
+    font-size: 0.6rem;
   }
 
   .board {
-    width: min(100%, calc(100svh - 184px), calc(100dvh - 184px), 390px);
+    width: min(100%, calc(100svh - 156px), calc(100dvh - 156px), 390px);
   }
 }
