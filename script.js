@@ -3,6 +3,7 @@ const solvedTiles = [1, 2, 3, 4, 5, 6, 7, 8, null];
 let tiles = [...solvedTiles];
 let moves = 0;
 let activePointer = null;
+let activeTouch = null;
 let suppressNextClick = false;
 
 const board = document.getElementById("board");
@@ -39,6 +40,9 @@ function renderBoard() {
     tile.addEventListener("pointerdown", (event) => startSwipe(event, index));
     tile.addEventListener("pointerup", (event) => finishSwipe(event, index));
     tile.addEventListener("pointercancel", cancelSwipe);
+    tile.addEventListener("touchstart", (event) => startTouchSwipe(event, index), { passive: false });
+    tile.addEventListener("touchend", (event) => finishTouchSwipe(event, index), { passive: false });
+    tile.addEventListener("touchcancel", cancelTouchSwipe);
     board.appendChild(tile);
   });
 
@@ -73,6 +77,20 @@ function isSwipeTowardEmpty(tileIndex, deltaX, deltaY) {
     && Math.sign(deltaY) === Math.sign(getRow(emptyIndex) - getRow(tileIndex));
 }
 
+function trySwipeMove(tileIndex, startX, startY, endX, endY) {
+  const deltaX = endX - startX;
+  const deltaY = endY - startY;
+  const distance = Math.hypot(deltaX, deltaY);
+
+  if (distance < 22 || !isNextToEmpty(tileIndex) || !isSwipeTowardEmpty(tileIndex, deltaX, deltaY)) {
+    return false;
+  }
+
+  suppressNextClick = true;
+  moveTile(tileIndex);
+  return true;
+}
+
 function startSwipe(event, tileIndex) {
   activePointer = {
     id: event.pointerId,
@@ -89,21 +107,64 @@ function finishSwipe(event, tileIndex) {
     return;
   }
 
-  const deltaX = event.clientX - activePointer.x;
-  const deltaY = event.clientY - activePointer.y;
-  const distance = Math.hypot(deltaX, deltaY);
+  const startX = activePointer.x;
+  const startY = activePointer.y;
   activePointer = null;
 
-  if (distance < 24 || !isNextToEmpty(tileIndex) || !isSwipeTowardEmpty(tileIndex, deltaX, deltaY)) {
-    return;
-  }
-
-  suppressNextClick = true;
-  moveTile(tileIndex);
+  trySwipeMove(tileIndex, startX, startY, event.clientX, event.clientY);
 }
 
 function cancelSwipe() {
   activePointer = null;
+}
+
+function startTouchSwipe(event, tileIndex) {
+  const touch = event.changedTouches[0];
+  if (!touch) {
+    return;
+  }
+
+  activeTouch = {
+    id: touch.identifier,
+    tileIndex,
+    x: touch.clientX,
+    y: touch.clientY
+  };
+
+  event.preventDefault();
+}
+
+function finishTouchSwipe(event, tileIndex) {
+  if (!activeTouch || activeTouch.tileIndex !== tileIndex) {
+    return;
+  }
+
+  const touch = Array.from(event.changedTouches).find((item) => item.identifier === activeTouch.id);
+  if (!touch) {
+    return;
+  }
+
+  const startX = activeTouch.x;
+  const startY = activeTouch.y;
+  const deltaX = touch.clientX - startX;
+  const deltaY = touch.clientY - startY;
+  const distance = Math.hypot(deltaX, deltaY);
+  activeTouch = null;
+
+  if (distance < 10) {
+    suppressNextClick = true;
+    moveTile(tileIndex);
+    event.preventDefault();
+    return;
+  }
+
+  if (trySwipeMove(tileIndex, startX, startY, touch.clientX, touch.clientY)) {
+    event.preventDefault();
+  }
+}
+
+function cancelTouchSwipe() {
+  activeTouch = null;
 }
 
 function moveTile(tileIndex) {
@@ -171,5 +232,6 @@ function shufflePuzzle() {
 
 shuffleButton.addEventListener("click", shufflePuzzle);
 resetButton.addEventListener("click", resetPuzzle);
+document.addEventListener("touchmove", (event) => event.preventDefault(), { passive: false });
 
 renderBoard();
