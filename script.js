@@ -17,6 +17,7 @@ function suppressUpcomingClick() {
 const board = document.getElementById("board");
 const moveCount = document.getElementById("move-count");
 const message = document.getElementById("message");
+const modeLabel = document.getElementById("mode-label");
 const numbersModeButton = document.getElementById("numbers-mode");
 const imageModeButton = document.getElementById("image-mode");
 const shuffleButton = document.getElementById("shuffle-button");
@@ -41,6 +42,7 @@ function renderBoard() {
     tile.setAttribute("aria-label", currentMode === "numbers" ? `Move tile ${value}` : `Move image tile ${value}`);
     if (currentMode === "image") {
       tile.classList.add("image-tile");
+      tile.dataset.tile = value;
       setImageTilePosition(tile, value);
     }
     tile.addEventListener("click", () => {
@@ -78,6 +80,7 @@ function setMode(mode) {
   imageModeButton.classList.toggle("active", mode === "image");
   numbersModeButton.setAttribute("aria-pressed", String(mode === "numbers"));
   imageModeButton.setAttribute("aria-pressed", String(mode === "image"));
+  modeLabel.textContent = mode === "numbers" ? "Mode: Numbers" : "Mode: Image";
   renderBoard();
 }
 
