@@ -42,8 +42,7 @@ function renderBoard() {
     tile.setAttribute("aria-label", currentMode === "numbers" ? `Move tile ${value}` : `Move image tile ${value}`);
     if (currentMode === "image") {
       tile.classList.add("image-tile");
-      tile.dataset.tile = value;
-      setImageTilePosition(tile, value);
+      tile.appendChild(createImagePiece(value));
     }
     tile.addEventListener("click", () => {
       if (suppressNextClick) {
@@ -67,11 +66,29 @@ function renderBoard() {
   moveCount.textContent = moves;
 }
 
-function setImageTilePosition(tile, value) {
+function createImagePiece(value) {
+  const piece = document.createElement("span");
+  const index = document.createElement("span");
+
+  piece.className = "image-piece";
+  index.className = "image-index";
+  index.textContent = value;
+  setImageTilePosition(piece, value);
+
+  piece.setAttribute("aria-hidden", "true");
+  index.setAttribute("aria-hidden", "true");
+
+  const fragment = document.createDocumentFragment();
+  fragment.appendChild(piece);
+  fragment.appendChild(index);
+  return fragment;
+}
+
+function setImageTilePosition(piece, value) {
   const solvedIndex = value - 1;
   const col = solvedIndex % 3;
   const row = Math.floor(solvedIndex / 3);
-  tile.style.backgroundPosition = `${col * 50}% ${row * 50}%`;
+  piece.style.backgroundPosition = `${col * 50}% ${row * 50}%`;
 }
 
 function setMode(mode) {
