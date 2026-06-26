@@ -450,6 +450,6 @@ h1 {
   }
 
   .board {
-    width: min(100%, calc(100svh - 112px), calc(100dvh - 112px), 390px);
+    width: min(100%, calc(100svh - 124px), calc(100dvh - 124px), 390px);
   }
 }
