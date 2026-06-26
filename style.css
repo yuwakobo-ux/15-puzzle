@@ -151,7 +151,18 @@ h1 {
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   -webkit-user-select: none;
-  transition: transform 120ms ease, background-color 120ms ease;
+  transition: transform 150ms ease, background-color 120ms ease;
+  will-change: transform;
+  z-index: 1;
+}
+
+.tile.dragging {
+  transition: none;
+  z-index: 2;
+}
+
+.tile.settling {
+  transition: transform 150ms ease;
 }
 
 .tile:active {
