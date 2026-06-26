@@ -4,6 +4,7 @@ let tiles = [...solvedTiles];
 let moves = 0;
 let dragState = null;
 let suppressNextClick = false;
+let currentMode = "numbers";
 const dragCommitRatio = 0.42;
 
 function suppressUpcomingClick() {
@@ -16,6 +17,8 @@ function suppressUpcomingClick() {
 const board = document.getElementById("board");
 const moveCount = document.getElementById("move-count");
 const message = document.getElementById("message");
+const numbersModeButton = document.getElementById("numbers-mode");
+const imageModeButton = document.getElementById("image-mode");
 const shuffleButton = document.getElementById("shuffle-button");
 const resetButton = document.getElementById("reset-button");
 
@@ -34,12 +37,16 @@ function renderBoard() {
     const tile = document.createElement("button");
     tile.className = "tile";
     tile.type = "button";
-    tile.textContent = value;
-    tile.setAttribute("aria-label", `Move tile ${value}`);
+    tile.textContent = currentMode === "numbers" ? value : "";
+    tile.setAttribute("aria-label", currentMode === "numbers" ? `Move tile ${value}` : `Move image tile ${value}`);
+    if (currentMode === "image") {
+      tile.classList.add("image-tile");
+      setImageTilePosition(tile, value);
+    }
     tile.addEventListener("click", () => {
-    if (suppressNextClick) {
-      suppressNextClick = false;
-      return;
+      if (suppressNextClick) {
+        suppressNextClick = false;
+        return;
       }
 
       moveTile(index);
@@ -56,6 +63,22 @@ function renderBoard() {
   });
 
   moveCount.textContent = moves;
+}
+
+function setImageTilePosition(tile, value) {
+  const solvedIndex = value - 1;
+  const col = solvedIndex % 3;
+  const row = Math.floor(solvedIndex / 3);
+  tile.style.backgroundPosition = `${col * 50}% ${row * 50}%`;
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  numbersModeButton.classList.toggle("active", mode === "numbers");
+  imageModeButton.classList.toggle("active", mode === "image");
+  numbersModeButton.setAttribute("aria-pressed", String(mode === "numbers"));
+  imageModeButton.setAttribute("aria-pressed", String(mode === "image"));
+  renderBoard();
 }
 
 function getRow(index) {
@@ -354,6 +377,8 @@ function shufflePuzzle() {
 
 shuffleButton.addEventListener("click", shufflePuzzle);
 resetButton.addEventListener("click", resetPuzzle);
+numbersModeButton.addEventListener("click", () => setMode("numbers"));
+imageModeButton.addEventListener("click", () => setMode("image"));
 document.addEventListener("touchmove", (event) => event.preventDefault(), { passive: false });
 
 renderBoard();
