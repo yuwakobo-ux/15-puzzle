@@ -10,7 +10,7 @@
   <main class="app" aria-labelledby="app-title">
     <header class="header">
       <h1 id="app-title">Mini Slide Puzzle</h1>
-      <p class="version">Ver0.3.2</p>
+      <p class="version">Ver0.4</p>
       <p class="subtitle">Slide the tiles into order from 1 to 8.</p>
     </header>
 
@@ -27,6 +27,11 @@
       <button id="image-mode" class="mode-button" type="button" aria-pressed="false">Image</button>
     </div>
     <p id="mode-label" class="mode-label" aria-live="polite">Mode: Numbers</p>
+    <div id="theme-switch" class="theme-switch hidden" aria-label="Image theme">
+      <button class="theme-button active" type="button" data-theme="flower" aria-pressed="true">Flower</button>
+      <button class="theme-button" type="button" data-theme="sky" aria-pressed="false">Sky</button>
+      <button class="theme-button" type="button" data-theme="japanese" aria-pressed="false">Japanese</button>
+    </div>
 
     <section
       id="board"

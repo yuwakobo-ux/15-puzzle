@@ -5,6 +5,7 @@ let moves = 0;
 let dragState = null;
 let suppressNextClick = false;
 let currentMode = "numbers";
+let currentTheme = "flower";
 const dragCommitRatio = 0.42;
 
 function suppressUpcomingClick() {
@@ -20,11 +21,14 @@ const message = document.getElementById("message");
 const modeLabel = document.getElementById("mode-label");
 const numbersModeButton = document.getElementById("numbers-mode");
 const imageModeButton = document.getElementById("image-mode");
+const themeSwitch = document.getElementById("theme-switch");
+const themeButtons = Array.from(document.querySelectorAll(".theme-button"));
 const shuffleButton = document.getElementById("shuffle-button");
 const resetButton = document.getElementById("reset-button");
 
 function renderBoard() {
   board.innerHTML = "";
+  updateBoardTheme();
 
   tiles.forEach((value, index) => {
     if (value === null) {
@@ -98,7 +102,24 @@ function setMode(mode) {
   numbersModeButton.setAttribute("aria-pressed", String(mode === "numbers"));
   imageModeButton.setAttribute("aria-pressed", String(mode === "image"));
   modeLabel.textContent = mode === "numbers" ? "Mode: Numbers" : "Mode: Image";
+  themeSwitch.classList.toggle("hidden", mode !== "image");
   renderBoard();
+}
+
+function setTheme(theme) {
+  currentTheme = theme;
+  themeButtons.forEach((button) => {
+    const isActive = button.dataset.theme === theme;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+  updateBoardTheme();
+}
+
+function updateBoardTheme() {
+  board.classList.toggle("theme-flower", currentTheme === "flower");
+  board.classList.toggle("theme-sky", currentTheme === "sky");
+  board.classList.toggle("theme-japanese", currentTheme === "japanese");
 }
 
 function getRow(index) {
@@ -399,6 +420,9 @@ shuffleButton.addEventListener("click", shufflePuzzle);
 resetButton.addEventListener("click", resetPuzzle);
 numbersModeButton.addEventListener("click", () => setMode("numbers"));
 imageModeButton.addEventListener("click", () => setMode("image"));
+themeButtons.forEach((button) => {
+  button.addEventListener("click", () => setTheme(button.dataset.theme));
+});
 document.addEventListener("touchmove", (event) => event.preventDefault(), { passive: false });
 
 renderBoard();

@@ -9,7 +9,7 @@
   --tile-active: #255a5d;
   --empty: #e8edf1;
   --focus: #e0a100;
-  --sample-image:
+  --flower-image:
     radial-gradient(circle at 50% 50%, #fff4a3 0 9%, transparent 10%),
     radial-gradient(ellipse at 50% 22%, #ff2f7d 0 16%, transparent 17%),
     radial-gradient(ellipse at 78% 50%, #ff8a00 0 16%, transparent 17%),
@@ -18,6 +18,20 @@
     radial-gradient(circle at 16% 16%, #ffffff 0 8%, transparent 9%),
     radial-gradient(circle at 84% 84%, #7cff4f 0 10%, transparent 11%),
     linear-gradient(135deg, #3810a8 0%, #e600ff 42%, #00d084 100%);
+  --sky-image:
+    radial-gradient(circle at 78% 20%, #fff7a8 0 11%, transparent 12%),
+    radial-gradient(ellipse at 22% 68%, #ffffff 0 12%, transparent 13%),
+    radial-gradient(ellipse at 42% 62%, #eaf8ff 0 14%, transparent 15%),
+    radial-gradient(ellipse at 70% 72%, #ffffff 0 12%, transparent 13%),
+    linear-gradient(180deg, #1478ff 0%, #65d8ff 55%, #f8f3bf 100%);
+  --japanese-image:
+    radial-gradient(circle at 50% 46%, #d9152c 0 18%, transparent 19%),
+    linear-gradient(135deg, transparent 0 43%, rgba(36, 36, 36, 0.24) 44% 46%, transparent 47%),
+    linear-gradient(45deg, transparent 0 45%, rgba(36, 36, 36, 0.18) 46% 48%, transparent 49%),
+    radial-gradient(circle at 16% 18%, #111111 0 5%, transparent 6%),
+    radial-gradient(circle at 84% 82%, #111111 0 5%, transparent 6%),
+    linear-gradient(180deg, #fff8ea 0%, #f4e5c8 100%);
+  --theme-image: var(--flower-image);
 }
 
 * {
@@ -142,6 +156,39 @@ h1 {
   text-align: center;
 }
 
+.theme-switch {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  flex: 0 0 auto;
+  margin: 0 0 6px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f4f7f9;
+}
+
+.theme-switch.hidden {
+  display: none;
+}
+
+.theme-button {
+  min-height: 30px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.theme-button.active {
+  border-color: var(--focus);
+  background: #ffe8a3;
+  color: #17202a;
+}
+
 .label {
   display: block;
   color: var(--muted);
@@ -171,7 +218,7 @@ h1 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 5px;
-  width: min(100%, calc(100svh - 196px), calc(100dvh - 196px), 390px);
+  width: min(100%, calc(100svh - 230px), calc(100dvh - 230px), 390px);
   min-width: 0;
   aspect-ratio: 1;
   align-self: center;
@@ -226,7 +273,7 @@ h1 {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background-image: var(--sample-image);
+  background-image: var(--theme-image);
   background-size: 300% 300%;
   background-repeat: no-repeat;
   pointer-events: none;
@@ -251,6 +298,7 @@ h1 {
 
 .tile:focus-visible,
 .mode-button:focus-visible,
+.theme-button:focus-visible,
 .controls button:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
@@ -259,6 +307,18 @@ h1 {
 .empty {
   border-radius: 6px;
   background: var(--empty);
+}
+
+.theme-flower {
+  --theme-image: var(--flower-image);
+}
+
+.theme-sky {
+  --theme-image: var(--sky-image);
+}
+
+.theme-japanese {
+  --theme-image: var(--japanese-image);
 }
 
 .controls {
@@ -325,12 +385,21 @@ h1 {
     margin-bottom: 4px;
   }
 
+  .theme-switch {
+    margin-bottom: 4px;
+  }
+
+  .theme-button {
+    min-height: 28px;
+    font-size: 0.72rem;
+  }
+
   .controls button {
     min-height: 38px;
   }
 
   .board {
-    width: min(100%, calc(100svh - 178px), calc(100dvh - 178px), 390px);
+    width: min(100%, calc(100svh - 212px), calc(100dvh - 212px), 390px);
   }
 }
 
@@ -360,7 +429,12 @@ h1 {
     font-size: 0.7rem;
   }
 
+  .theme-button {
+    min-height: 26px;
+    font-size: 0.66rem;
+  }
+
   .board {
-    width: min(100%, calc(100svh - 156px), calc(100dvh - 156px), 390px);
+    width: min(100%, calc(100svh - 184px), calc(100dvh - 184px), 390px);
   }
 }
