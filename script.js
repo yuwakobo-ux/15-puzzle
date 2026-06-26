@@ -6,6 +6,13 @@ let dragState = null;
 let suppressNextClick = false;
 const dragCommitRatio = 0.42;
 
+function suppressUpcomingClick() {
+  suppressNextClick = true;
+  window.setTimeout(() => {
+    suppressNextClick = false;
+  }, 350);
+}
+
 const board = document.getElementById("board");
 const moveCount = document.getElementById("move-count");
 const message = document.getElementById("message");
@@ -30,9 +37,9 @@ function renderBoard() {
     tile.textContent = value;
     tile.setAttribute("aria-label", `Move tile ${value}`);
     tile.addEventListener("click", () => {
-      if (suppressNextClick) {
-        suppressNextClick = false;
-        return;
+    if (suppressNextClick) {
+      suppressNextClick = false;
+      return;
       }
 
       moveTile(index);
@@ -87,20 +94,31 @@ function getDragPlan(tileIndex, tileElement) {
   const emptyIndex = tiles.indexOf(null);
   const rowDelta = getRow(emptyIndex) - getRow(tileIndex);
   const colDelta = getCol(emptyIndex) - getCol(tileIndex);
-  const rect = tileElement.getBoundingClientRect?.() || { width: 96, height: 96 };
+  const tileRect = tileElement.getBoundingClientRect?.() || { width: 96, height: 96, left: 0, top: 0 };
+  const emptyRect = board.children[emptyIndex]?.getBoundingClientRect?.();
 
   if (colDelta !== 0) {
+    const measuredDistance = emptyRect
+      ? Math.abs(emptyRect.left - tileRect.left)
+      : tileRect.width;
+    const distance = measuredDistance || tileRect.width;
+
     return {
       axis: "x",
       direction: Math.sign(colDelta),
-      distance: rect.width
+      distance
     };
   }
+
+  const measuredDistance = emptyRect
+    ? Math.abs(emptyRect.top - tileRect.top)
+    : tileRect.height;
+  const distance = measuredDistance || tileRect.height;
 
   return {
     axis: "y",
     direction: Math.sign(rowDelta),
-    distance: rect.height
+    distance
   };
 }
 
@@ -171,14 +189,14 @@ function finishDrag(tileIndex, endX, endY) {
       ? `translateX(${finalOffset}px)`
       : `translateY(${finalOffset}px)`;
     window.setTimeout(() => moveTile(tileIndex), 120);
-    suppressNextClick = true;
+    suppressUpcomingClick();
     return true;
   }
 
   tileElement.style.transform = "";
   window.setTimeout(() => tileElement.classList.remove("settling"), 160);
   if (moved) {
-    suppressNextClick = true;
+    suppressUpcomingClick();
   }
   return moved;
 }
@@ -262,7 +280,7 @@ function finishTouchDrag(event, tileIndex) {
     moveTile(tileIndex);
   }
 
-  suppressNextClick = true;
+  suppressUpcomingClick();
   event.preventDefault();
 }
 
