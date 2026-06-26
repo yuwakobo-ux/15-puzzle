@@ -98,28 +98,32 @@ function getDragPlan(tileIndex, tileElement) {
   const emptyRect = board.children[emptyIndex]?.getBoundingClientRect?.();
 
   if (colDelta !== 0) {
-    const measuredDistance = emptyRect
-      ? Math.abs(emptyRect.left - tileRect.left)
-      : tileRect.width;
-    const distance = measuredDistance || tileRect.width;
+    const signedDistance = emptyRect
+      ? getCenter(emptyRect, "x") - getCenter(tileRect, "x")
+      : tileRect.width * Math.sign(colDelta);
 
     return {
       axis: "x",
-      direction: Math.sign(colDelta),
-      distance
+      signedDistance: signedDistance || tileRect.width * Math.sign(colDelta)
     };
   }
 
-  const measuredDistance = emptyRect
-    ? Math.abs(emptyRect.top - tileRect.top)
-    : tileRect.height;
-  const distance = measuredDistance || tileRect.height;
+  const signedDistance = emptyRect
+    ? getCenter(emptyRect, "y") - getCenter(tileRect, "y")
+    : tileRect.height * Math.sign(rowDelta);
 
   return {
     axis: "y",
-    direction: Math.sign(rowDelta),
-    distance
+    signedDistance: signedDistance || tileRect.height * Math.sign(rowDelta)
   };
+}
+
+function getCenter(rect, axis) {
+  if (axis === "x") {
+    return rect.left + rect.width / 2;
+  }
+
+  return rect.top + rect.height / 2;
 }
 
 function startDrag(pointerType, id, tileIndex, tileElement, startX, startY) {
@@ -154,13 +158,13 @@ function updateDrag(clientX, clientY) {
   const rawOffset = dragState.plan.axis === "x"
     ? clientX - dragState.startX
     : clientY - dragState.startY;
-  const towardEmptyOffset = Math.max(0, rawOffset * dragState.plan.direction);
-  const maxOffset = dragState.plan.distance;
-  const clampedOffset = Math.min(towardEmptyOffset, maxOffset);
-  const signedOffset = clampedOffset * dragState.plan.direction;
+  const signedDistance = dragState.plan.signedDistance;
+  const minOffset = Math.min(0, signedDistance);
+  const maxOffset = Math.max(0, signedDistance);
+  const signedOffset = Math.min(Math.max(rawOffset, minOffset), maxOffset);
 
-  dragState.offset = clampedOffset;
-  dragState.moved = dragState.moved || clampedOffset > 4;
+  dragState.offset = Math.abs(signedOffset);
+  dragState.moved = dragState.moved || Math.abs(signedOffset) > 4;
 
   if (dragState.plan.axis === "x") {
     dragState.tileElement.style.transform = `translateX(${signedOffset}px)`;
@@ -177,14 +181,15 @@ function finishDrag(tileIndex, endX, endY) {
   updateDrag(endX, endY);
 
   const { tileElement, offset, plan, moved } = dragState;
-  const shouldMove = offset >= plan.distance * dragCommitRatio;
+  const targetDistance = Math.abs(plan.signedDistance);
+  const shouldMove = offset >= targetDistance * dragCommitRatio;
   dragState = null;
 
   tileElement.classList.remove("dragging");
   tileElement.classList.add("settling");
 
   if (shouldMove) {
-    const finalOffset = plan.distance * plan.direction;
+    const finalOffset = plan.signedDistance;
     tileElement.style.transform = plan.axis === "x"
       ? `translateX(${finalOffset}px)`
       : `translateY(${finalOffset}px)`;
